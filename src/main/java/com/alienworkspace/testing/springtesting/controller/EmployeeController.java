@@ -1,6 +1,7 @@
 package com.alienworkspace.testing.springtesting.controller;
 
 import com.alienworkspace.testing.springtesting.model.Employee;
+import com.alienworkspace.testing.springtesting.repository.EmployeeRepository;
 import com.alienworkspace.testing.springtesting.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
-
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
@@ -28,14 +28,9 @@ public class EmployeeController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee, @PathVariable("id") Long employeeId){
         employee.setId(employeeId);
-        return employeeService.findById(employee.getId())
-                .map(savedEmployee -> {
-                    savedEmployee.setFirstName(employee.getFirstName());
-                    savedEmployee.setLastName(employee.getLastName());
-                    savedEmployee.setEmail(employee.getEmail());
-                    return new ResponseEntity<>(employeeService.update(savedEmployee), HttpStatus.OK);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return employeeService.findById(employeeId)
+                        .map(fetchedEmployee -> ResponseEntity.ok(employeeService.update(employee)))
+                        .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
