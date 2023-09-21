@@ -3,12 +3,13 @@ pipeline{
     stages {
         stage('Building the application'){
             steps{
+                sh 'rm target -R'
                 sh 'mvn clean package'
             }
             post {
                 success {
                     echo 'Archiving the artifact'
-                    sh 'mv target/*.war target/springrestapi.war'
+                    sh 'mv target/*.war target/spring-rest-api.war'
                     archiveArtifacts artifacts: 'target/*.war'
                 }
             }
