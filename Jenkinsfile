@@ -9,8 +9,8 @@ pipeline{
             post {
                 success {
                     echo 'Archiving the artifact'
-                    sh 'mv target/*.war target/springrestapi.war'
-                    archiveArtifacts artifacts: 'target/*.war'
+                    sh 'mv target/*.war target/restapi.war'
+                    archiveArtifacts artifacts: 'target/restapi.war'
                 }
             }
         }
